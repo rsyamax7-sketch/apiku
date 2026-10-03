@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard Modern - Users API</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f0f4f8; /* Warna latar belakang abu-abu sangat muda yang modern */
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR MODERN */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            /* Gradien Biru-Ungu yang modern */
+            background: linear-gradient(145deg, #1d4ed8, #7c3aed);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 4px 0 15px rgba(37, 99, 235, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 15px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo h2 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .logo p {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px); /* Efek geser lembut saat hover */
+        }
+
+        /* MAIN CONTENT AREA */
+        .main {
+            margin-left: 260px;
+            min-height: 100vh;
+            padding-bottom: 30px;
+        }
+
+        /* TOPBAR MODERN */
+        .topbar {
+            height: 80px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .topbar h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            /* Gradien lembut untuk avatar */
+            background: linear-gradient(135deg, #dbeafe, #a78bfa);
+            color: #1d4ed8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15);
+        }
+
+        .profile strong {
+            font-size: 15px;
+            color: #1f2937;
+        }
+
+        /* CONTENT SECTION */
+        .content {
+            padding: 40px;
+        }
+
+        /* WELCOME CARD MODERN */
+        .welcome {
+            /* Gradien biru-ungu yang cerah untuk welcome card */
+            background: linear-gradient(135deg, #2563eb, #9333ea);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
+        }
+
+        .welcome h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome p {
+            opacity: 0.9;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        /* Elemen dekoratif abstrak */
+        .welcome::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        /* STATS GRID */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* STAT CARD MODERN */
+        .stat {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .stat:hover {
+            transform: translateY(-5px); /* Efek angkat saat hover */
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.07);
+            border-color: #dbeafe;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: #eff6ff; /* Latar belakang ikon yang lembut */
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat span {
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            margin-top: 5px;
+            letter-spacing: -1px;
+        }
+
+        /* Status API dinamis */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #16a34a;
+            background: #dcfce7;
+            margin-top: 5px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #16a34a;
+            border-radius: 50%;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            margin-bottom: 20px;
+            padding-left: 5px;
+        }
+
+        .section-title h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .section-title p {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        /* FEATURES GRID */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        /* FEATURE CARD MODERN */
+        .feature {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border-color: #dbeafe;
+        }
+
+        .feature-icon {
+            width: 55px;
+            height: 55px;
+            background: #f1f5f9;
+            color: #7c3aed; /* Warna ungu untuk ikon fitur */
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            flex-grow: 1; /* Pastikan teks mengisi ruang */
+        }
+
+        .feature a {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb; /* Tombol biru yang menonjol */
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .feature a:hover {
+            background: #1d4ed8;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        /* FOOTER MODERN */
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 40px;
+            margin-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media(max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+            .main {
+                margin-left: 220px;
+            }
+            .stats, .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px; /* Sembunyikan sidebar di mobile */
+                width: 260px;
+                z-index: 1000;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .main {
+                margin-left: 0;
+            }
+            .topbar {
+                padding: 0 20px;
+            }
+            .content {
+                padding: 25px;
+            }
+            .welcome {
+                padding: 30px;
+            }
+            .welcome h2 {
+                font-size: 26px;
+            }
+            .stats, .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <!-- Gambar diganti ke URL langsung image Pinterest -->
+                <img src="bunda.jpg" alt="">
+            </div>
+
+            <div>
+                <h2>API Portal</h2>
+                <p>User Management System</p>
+            </div>
+        </div>
+
+        <div class="menu-title">
+            NAVIGASI UTAMA
+        </div>
+
+        <nav class="menu">
+
+            <a href="dashboard.html" class="active">
+                💻
+                <span>Dashboard</span>
+            </a>
+
+            <a href="index.html">
+                👥
+                <span>Data Pengguna</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN SECTION -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <h1>Dashboard</h1>
+
+            <div class="profile">
+                <div class="avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Admin Super</strong>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT SECTION -->
+        <section class="content">
+
+            <!-- WELCOME CARD -->
+            <div class="welcome">
+
+                <h2>Selamat Datang Kembali 👋</h2>
+
+                <p>
+                    Kelola data pengguna dengan cepat dan efisien menggunakan sistem Users API Modern ini. Pantau status dan akses fitur melalui kartu di bawah.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTIK SECTION -->
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div>
+                        <span>Total Pengguna</span>
+                        <strong id="totalUsers">0</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon">
+                        📡
+                    </div>
+
+                    <div>
+                        <span>Status Layanan API</span>
+                        <div class="status-badge">
+                            <div class="status-dot"></div>
+                            Online
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div class="stat-icon">
+                        🗃️
+                    </div>
+
+                    <div>
+                        <span>Database Terhubung</span>
+                        <strong>
+                            data_api
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FITUR SECTION -->
+            <div class="section-title">
+
+                <h2>Fitur Utama Sistem</h2>
+
+                <p>
+                    Akses cepat ke berbagai fungsi manajemen data yang tersedia.
+                </p>
+
+            </div>
+
+
+            <div class="features">
+
+                <!-- Fitur 1 -->
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        📝
+                    </div>
+
+                    <h3>Manajemen Data Users</h3>
+
+                    <p>
+                        Lihat, tambahkan, edit, dan hapus data pengguna dengan antarmuka yang intuitif.
+                    </p>
+
+                    <a href="index.html">
+                        Kelola Sekarang →
+                    </a>
+
+                </div>
+
+
+                <!-- Fitur 2 -->
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🔌
+                    </div>
+
+                    <h3>Akses REST API</h3>
+
+                    <p>
+                        Dokumentasi dan akses langsung ke data pengguna melalui endpoint API lokal.
+                    </p>
+
+                    <a href="http://localhost/lari_ada_api/data_json.php" target="_blank">
+                        Lihat Endpoint →
+                    </a>
+
+                </div>
+
+
+                <!-- Fitur 3 -->
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        🛡️
+                    </div>
+
+                    <h3>Keamanan & Database</h3>
+
+                    <p>
+                        Sistem terintegrasi dengan database lokal dengan lapisan keamanan standar.
+                    </p>
+
+                    <a href="index.html">
+                        Review Data →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © 2024 Users API Pro • Local Database System • Built with Care
+        </div>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        const API =
+            "http://localhost/lari_ada_api/";
+
+        function ambilJumlahUser() {
+
+            fetch(API + "data_json.php")
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error("API Error");
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(data => {
+
+                    document.getElementById(
+                        "totalUsers"
+                    ).innerText = data.length;
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        "totalUsers"
+                    ).innerText = "-";
+
+                });
+
+        }
+
+        ambilJumlahUser();
+
+    </script>
+
+</body>
+</html>
